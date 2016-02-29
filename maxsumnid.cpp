@@ -118,7 +118,8 @@ int main()
 }
 
 
-/*for (int sub_array = 1; sub_array < num; sub_array++)
+/*
+for (int sub_array = 1; sub_array < num; sub_array++)
   {
     cout << "array size " << sub_array<<endl;
     for (index = 0; index < num; index++)
