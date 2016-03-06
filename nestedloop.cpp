@@ -12,34 +12,34 @@ int main()
 {
 double arr[100]; 
 double sum = 0;
-double max = INT_MIN;
-double num; 
-int index;
+double max_sum = INT_MIN;
+double number_of_inputs; 
+int index_sub_array;
 cout << "enter the number of values\n";
-cin >> num;
+cin >> number_of_inputs;
 cout << "enter the numbers\n";
   
-	for(int m = 0; m< num; m++)
+	for(int m = 0; m< number_of_inputs; m++)
 	{
 	cin >> arr[m];
 	}
   
-	for (index = 0; index <num ; index++)
+	for (index_sub_array = 0; index_sub_array <number_of_inputs ; index_sub_array++)
 	{
 	int sum = 0;
-		for (int sub_array = 1; sub_array <=num; sub_array++)
+		for (int sub_array = 1; sub_array <=number_of_inputs; sub_array++)
 		{
-			if((sub_array+index) > num)
+			if((sub_array+index_sub_array) > number_of_inputs)
 			break;
-			sum = sum + arr[index + sub_array-1];
-				if (max < sum)
+			sum = sum + arr[index_sub_array + sub_array-1];
+				if (max_sum < sum)
 				{
-				max = sum;
+				max_sum = sum;
 				}
 		}
 	}
 
-cout << "max is " << max << endl;
+cout << "max is " << max_sum << endl;
 return 0;
 }
 
