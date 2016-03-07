@@ -7,15 +7,15 @@
 #include <ctime>
 
 using namespace std;
+int rec_times = 0;
 
-
-int file_open (char *argv1, int *p_index)
+double* file_open (char *argv1, int *p_index)
 {
  double finalfloat;
  int index=0;
  int length = 100;
- double *input_data = new double [length];
- double *input_data_old;
+ double* input_data = new double [length];
+ double* input_data_old;
  string stream1;
  string stream2;
   ifstream file;
@@ -23,7 +23,7 @@ int file_open (char *argv1, int *p_index)
 	if(!file.is_open())
 	{
 	  cerr << "File not found" <<endl;
-	  return -2;
+	  return NULL;
 	}
 	else
 	{
@@ -38,7 +38,7 @@ int file_open (char *argv1, int *p_index)
 	      if ( !ss ) 
 	      { 
 		cerr << "INVALID INPUT" <<endl;
-		return -3;
+		return NULL;
 	      }
 	      else
 	      {
@@ -57,19 +57,18 @@ int file_open (char *argv1, int *p_index)
 	  }
 	}
   file.close();
-  *p_index = index;
-  return (input_data[index]);
+
+  if (index != 0)
+    *p_index = index;
+
+  return (input_data);
 }
 	
-
-
-
 
       
 //Brute force method
 int nested_loop(double input_data[], int count_input)
 {
-  int start_time = clock();  //Execution time starts
   double sum = 0;	     
   double max_sum = INT_MIN; //Initialising the max_sum to the least value possible
   int index_point;          //The first element for any array
@@ -92,8 +91,6 @@ int nested_loop(double input_data[], int count_input)
 		}
 	}
     }
-  int stop_time = clock(); //Execution time ends
-  cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
   return 0;
 }
 
@@ -112,55 +109,52 @@ int max(int first_num, int second_num, int third_num)
 }
 
 //Function to calculate the sum if there are odd number of inputs
-int max_middle_sum(double input_data[],int ref1, int middle_point, int count)
+int max_middle_sum(double* input_data, int ref1,
+		   int middle_point, int count)
 {
   //Computation of the sum to the left side of the middle point.
   //int ref1 = 0; // reference point 2
-  int sum = 0;
-  int sum_left = INT_MIN;
+  double suml = 0;
+  double sum_left = INT_MIN;
   for (int i = middle_point; i >=ref1; i--)
-  {
-    sum = sum + input_data[i];
-    if (sum > sum_left)
-    {
-      sum_left = sum;	
+    { 
+      int temp = suml;
+      suml = temp + input_data[i];
+      if (suml > sum_left)
+	{
+	  sum_left = suml;	
+	}
     }
-  }
-
+  
   //Computation of the sum to the right side of the middle point.
-  int sum1 = 0;
-  int sum_right = INT_MIN;
+  double sumr = 0;
+  double sum_right = INT_MIN;
   for (int i = middle_point+1; i <=count; i++)
-  {
-    sum1 = sum1+ input_data[i];
-    if(sum1 > sum_right)
     {
-      sum_right = sum1;
+      sumr = sumr + input_data[i];
+      if(sumr > sum_right)
+	{
+	  sum_right = sumr;
+	}
     }
+  
+  return sum_left+sum_right;
 }
-return sum_left+sum_right;
-}
 
 
-
-
-
-
-int divide_conquer (double input_data[],int ref1, int count_input)
+int divide_conquer (double* input_data, int ref1, int count)
 {
-// int ref1 = 0; // l reference point 1
- int count = count_input - 1;
- if ( ref1 == count)  //If there is only 1 element in the array
- {
-   return input_data[ref1];
- }
-
-int middle_point = (ref1+count)/2;
-
-return max(divide_conquer(input_data, ref1, middle_point),
-	   divide_conquer(input_data, middle_point+1, count),
-	   max_middle_sum(input_data, ref1, middle_point, count));
-
+  //cout << "rec-Number" << rec_times++ << "\n";
+  if ( ref1 == count)  //If there is only 1 element in the array
+    {
+      return input_data[ref1];
+    }
+  
+  int middle_point = (ref1+count)/2;
+  
+  return max(divide_conquer(input_data, ref1, middle_point),
+	     divide_conquer(input_data, middle_point+1, count),
+	     max_middle_sum(input_data, ref1, middle_point, count));
 }
 
 
@@ -168,19 +162,30 @@ return max(divide_conquer(input_data, ref1, middle_point),
 int main(int argc, char *argv[])
 {
 if (argc <= 2) 
-{
-  int index_func;
-  file_open(argv [1], &index_func);
-  double max_sum = nested_loop(input_data, index_func); //Calling Brute force function
-  cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
-  double max_sum = divide_conquer(input_data,0, index_func); //Calling divide and conquer function
-  cout << max_sum << endl;
-}
-else
-{
-  cerr << "Wrong number of arguments provided \n";  
-      return -1;
-}
+  {
+    int num_of_input_elems = -1;
+    double* input_data = file_open(argv [1], &num_of_input_elems);
+
+    if (input_data == NULL || num_of_input_elems == -1)
+      cerr << "Input data is not valid\n"; 
+      return -100;
+
+    int start_time_nested = clock();
+    double max_sum1 = nested_loop(input_data, num_of_input_elems); //Calling Brute force function
+    int end_time_nested = clock();
+    cout << max_sum1 << "\t"<< (end_time_nested - start_time_nested)/double (CLOCKS_PER_SEC) << "[sec]"<<endl;
+
+    int start_time_dnc = clock();
+    double max_sum2 = divide_conquer(input_data, 0, num_of_input_elems - 1); //Calling divide and conquer function
+    int end_time_dnc = clock();
+    cout << max_sum2 << "\t"<< (end_time_dnc - start_time_dnc)/double (CLOCKS_PER_SEC) << "[sec]"<<endl;
+  }
+ else
+   {
+     cerr << "Wrong number of arguments provided \n";  
+  return -1;
+   }
+
 
 }
 
