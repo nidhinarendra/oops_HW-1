@@ -5,66 +5,78 @@
 #include <cstring>
 #include <climits>
 #include <ctime>
+#include <cstdlib>
+#include <typeinfo>
 
 using namespace std;
 int rec_times = 0;
+	
+void print_arr(double* arr, int len)
+{
+  for (int i=0; i <len ; i++)
+    cout << arr[i] << " ";
+
+  cout << "totall array count is" << len << "\n";
+}
 
 double* file_open (char *argv1, int *p_index)
 {
- double finalfloat;
- int index=0;
- int length = 100;
- double* input_data = new double [length];
- double* input_data_old;
- string stream1;
- string stream2;
+  double finalfloat;
+  int index=0;
+  int length = 10000;
+  double* input_data = new double [length];
+  double* input_data_old;
+  string stream1;
+  string stream2;
   ifstream file;
   file.open(argv1);
-	if(!file.is_open())
+  if(!file.is_open())
+    {
+      cerr << "File not found" <<endl;
+      return NULL;
+    }
+  else
+    {
+      while(!file.eof())
 	{
-	  cerr << "File not found" <<endl;
-	  return NULL;
-	}
-	else
-	{
-	  while(!file.eof())
-	  {
-	    file >> stream1;
-	    stringstream ss(stream1);
+	  file >> stream1;
+	  stringstream ss(stream1);
 	    while ( getline (ss, stream1, ','))
-	    {
+	      {
 	      stringstream ss(stream1);
 	      ss >> finalfloat;
 	      if ( !ss ) 
-	      { 
-		cerr << "INVALID INPUT" <<endl;
-		return NULL;
-	      }
-	      else
-	      {
-		if (file.eof()) 
-		break;
-		else if (index == length)
-		{
-		  length = length * 2;
-		  input_data_old = input_data;
-		  input_data = new double [length];
-		  strncpy((char*)input_data, (const char*)input_data_old,sizeof(input_data_old));
+		{ 
+		  cerr << "INVALID INPUT" <<endl;
+		  return NULL;
 		}
-		input_data[index ++] = finalfloat;
-	     }
-	    } 
-	  }
+	      else
+		{
+		  if (file.eof()) 
+		    break;
+		  else if (index == length)
+		    {
+		      length = length * 2;
+		      input_data_old = input_data;
+		      input_data = new double [length];
+		      memcpy((char*)input_data, (const char*)input_data_old,
+			     (sizeof(double) * length));
+		    }
+		  input_data[index ++] = finalfloat;
+		}
+	      } 
 	}
+    }
   file.close();
-
+  // print_arr(input_data_old, length);
+  // abort();
   if (index != 0)
     *p_index = index;
-
+  else
+    cerr << "Input data is not valid\n"; 
+  
   return (input_data);
 }
-	
-
       
 //Brute force method
 int nested_loop(double input_data[], int count_input)
@@ -167,7 +179,6 @@ if (argc <= 2)
     double* input_data = file_open(argv [1], &num_of_input_elems);
 
     if (input_data == NULL || num_of_input_elems == -1)
-      cerr << "Input data is not valid\n"; 
       return -100;
 
     int start_time_nested = clock();
