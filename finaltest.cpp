@@ -9,7 +9,7 @@
 #include <typeinfo>
 
 using namespace std;
-int rec_times = 0;
+double* input_data = NULL; // Globally avaiable data and dynamically grows
 	
 void print_arr(double* arr, int len)
 {
@@ -19,21 +19,23 @@ void print_arr(double* arr, int len)
   cout << "totall array count is" << len << "\n";
 }
 
-double* file_open (char *argv1, int *p_index)
+void file_open (char *argv1, int *p_index)
 {
   double finalfloat;
   int index=0;
   int length = 10000;
-  double* input_data = new double [length];
+  
   double* input_data_old;
   string stream1;
   string stream2;
   ifstream file;
   file.open(argv1);
+
+  input_data = new double [length];
   if(!file.is_open())
     {
       cerr << "File not found" <<endl;
-      return NULL;
+      return;
     }
   else
     {
@@ -48,7 +50,7 @@ double* file_open (char *argv1, int *p_index)
 	      if ( !ss ) 
 		{ 
 		  cerr << "INVALID INPUT" <<endl;
-		  return NULL;
+		  return;
 		}
 	      else
 		{
@@ -75,7 +77,7 @@ double* file_open (char *argv1, int *p_index)
   else
     cerr << "Input data is not valid\n"; 
   
-  return (input_data);
+  return;
 }
       
 //Brute force method
@@ -176,7 +178,7 @@ int main(int argc, char *argv[])
 if (argc <= 2) 
   {
     int num_of_input_elems = -1;
-    double* input_data = file_open(argv [1], &num_of_input_elems);
+    file_open(argv [1], &num_of_input_elems);
 
     if (input_data == NULL || num_of_input_elems == -1)
       return -100;
