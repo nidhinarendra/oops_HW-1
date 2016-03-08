@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 	{
 	  file >> stream1;
 	  stringstream ss(stream1);
-	  std::locale loc;
+	 /* std::locale loc;
 	  for (std::string::iterator it=stream1.begin(); it!=stream1.end(); ++it)
 	    {
 	      if (std::isalpha(*it,loc)) //To check if any alphabet is present in the input file
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
 		  cerr << "INVALID INPUT DATA\n";
 		  return -2;
 		}
-	    }
+	    }*/
 	  
 	      while ( getline (ss, stream1, ','))
 		{
@@ -145,11 +145,17 @@ int main(int argc, char *argv[])
 		    {
 		      char c = stream1[i];
 		      if ( c >= '0' && c <= '9')
-			cout << stream1[i] << " \t true!! \n";
+			//cout << stream1[i] << " \t true!! \n";
+			continue;
 		      else if(c == '.')
-			cout << stream1[i] << "\t true!! \n";
+			//cout << stream1[i] << "\t true!! \n";
+			continue;
+			else if (c == '-')
+			continue;
 		      else
-			cout << stream1[i] << "\t false!! \n";
+			//cout << stream1[i] << "\t false!! \n";
+			cerr << "INVALID INPUT DATA\n";
+			return -3;
 		    }
 		  
 		  stringstream ss(stream1);
