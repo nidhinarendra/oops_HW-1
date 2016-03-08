@@ -141,6 +141,17 @@ int main(int argc, char *argv[])
 	  
 	      while ( getline (ss, stream1, ','))
 		{
+		  for(int i = 0; i < stream1.length(); i++)
+		    {
+		      char c = stream1[i];
+		      if ( c >= '0' && c <= '9')
+			cout << stream1[i] << "true!! \n";
+		      else if(c == '.')
+			cout << stream1[i] << "true!! \n";
+		      else
+			cout << stream1[i] << "false!! \n";
+		    }
+		  
 		  stringstream ss(stream1);
 		  ss >> finalfloat;
 	      
