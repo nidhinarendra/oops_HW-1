@@ -5,15 +5,12 @@
 #include <cstring>
 #include <climits>
 #include <ctime>
-#include <cctype>
 
 using namespace std;
 
-
-//Brute force algorithm
 int nested_loop(double input_data[], int count_input)
 {
-  int start_time = clock(); //Computation time starts for Brute force algorithm
+  int start_time = clock();
   double sum = 0;
   double max_sum = INT_MIN;
   int index_point;
@@ -21,23 +18,24 @@ int nested_loop(double input_data[], int count_input)
   
   for (sub_array_length = 1; sub_array_length <= count_input ; sub_array_length++)
     {
-      
+
       for (index_point = 0; index_point <count_input; index_point++)
 	{
 	  if((sub_array_length+index_point) > count_input)
 	    break;
 	  sum = 0;
-	  for (int array_pointer = index_point; array_pointer < (sub_array_length+index_point); array_pointer++)
-	    sum = sum + input_data[array_pointer];
-	  if (max_sum < sum)
-	    {
-	      max_sum = sum;
-	    }
+		for (int array_pointer = index_point; array_pointer < (sub_array_length+index_point); array_pointer++)
+	        sum = sum + input_data[array_pointer];
+	      if (max_sum < sum)
+		{
+		  max_sum = sum;
+		}
+		//cout << "Max sum is "<< max_sum <<endl;
 	}
     }
-  int stop_time = clock();
-  cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
-  return 0;
+int stop_time = clock();
+cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+ return 0;
 }
 
 //Divide and conqure
@@ -56,7 +54,7 @@ double max(double first_num, double second_num, double third_num)
 
 //Function to calculate the sum if there are odd number of inputs
 double max_middle_sum(double* input_data, int ref,
-		      int middle_point, int count_input)
+		   int middle_point, int count_input)
 {
   //Computation of the sum to the left side of the middle point.
   double suml = 0;
@@ -70,7 +68,7 @@ double max_middle_sum(double* input_data, int ref,
 	}
     }
   
-  //Computation of the sum to the right side of the middle point.
+ //Computation of the sum to the right side of the middle point.
   double sumr = 0;
   double sum_right = INT_MIN;
   for (int i = middle_point+1; i <=count_input; i++)
@@ -86,15 +84,15 @@ double max_middle_sum(double* input_data, int ref,
 }
 
 
-//Divide and conquer main function
+
 double dnc(double input_data[], int ref, int count_input)
 {
-  if (ref == count_input)
-    {
-      return input_data[ref];
-    }
+if (ref == count_input)
+{
+return input_data[ref];
+}
 
-  int middle_point = (ref+count_input)/2;
+int middle_point = (ref+count_input)/2;
   
   return max(dnc(input_data, ref, middle_point),
 	     dnc(input_data, middle_point+1, count_input),
@@ -148,46 +146,22 @@ int main(int argc, char *argv[])
 			  length = length * 2;
 			  input_data_old = input_data;
 			  input_data = new double [length];
-			  memcpy((char*)input_data, (const char*)input_data_old,
-<<<<<<< Updated upstream
-				 (sizeof(double) * length));
-=======
-				  (sizeof(double) * length));
->>>>>>> Stashed changes
+			  strncpy((char*)input_data, (const char*)input_data_old,
+				  sizeof(input_data_old));
 			}
 		      input_data[index ++] = finalfloat;
-			if (isalpha (input_data[index]))
-			{
-			  cerr << "INVALID INPUT DATA\n";
-			  return -4;
-			}
 		    }
 		}
 	    }
 	} 
       file.close();
-<<<<<<< Updated upstream
-      if (index == 0)
-      { 
-      	cerr << "INVALID INPUT DATA\n";
-      }
-      else
-=======
-	if (index == 0)
-	{
-	  cerr << "INVALID INPUT DATA\n";
-	  return 0;
-	}
-      else
-	{
->>>>>>> Stashed changes
+      
       double max_sum_nested = nested_loop(input_data, index);
-      int start_time = clock();
-      double max_sum_dnc = dnc(input_data, 0 ,index-1);
-      int end_time = clock();
-      cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+	int start_time = clock();
+	double max_sum_dnc = dnc(input_data, 0 ,index-1);
+	int end_time = clock();
+	cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
       return 0;
-	}
     }
   else
     {
@@ -196,6 +170,5 @@ int main(int argc, char *argv[])
     }
   //should never come here
 }
-
-
+     
 

@@ -89,12 +89,12 @@ int nested_loop(double input_data[], int count_input)
   int sub_array_length;    
   
 
-  for (sub_array_length = 1; sub_array_length <= count_input ; sub_array_length++) 
+  for (sub_array_length = 1; sub_array_length <= count_input+1 ; sub_array_length++) 
     {
 
-      for (index_point = 0; index_point <count_input; index_point++)
+      for (index_point = 0; index_point <count_input+1; index_point++)
 	{
-	  if((sub_array_length+index_point) > count_input)
+	  if((sub_array_length+index_point) > count_input+1)
 	    break;
 	  sum = 0;
 		for (int array_pointer = index_point; array_pointer < (sub_array_length+index_point); array_pointer++)

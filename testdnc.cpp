@@ -15,7 +15,7 @@ int maxCrossingSum(int arr[], int l, int m, int h)
     // Include elements on left of mid.
     int sum = 0;
     int left_sum = INT_MIN;
-    for (int i = m; i >= l; i--)
+    for (int i = m; i >= l; i--)  //h is count_input - 1
     {
         sum = sum + arr[i];
         if (sum > left_sum)
@@ -58,10 +58,10 @@ int maxSubArraySum(int arr[], int l, int h)
 /*Driver program to test maxSubArraySum*/
 int main()
 {
-   int arr[] = {1.1,2.2,3.3,-1,1,1};
+   int arr[] = {1.1,2.2, -3, 0,3};
    int n = sizeof(arr)/sizeof(arr[0]);
 cout << "size of arr is " << sizeof(arr) << "size of the first element is " << sizeof(arr[0]) << "n is " << n;
-   int max_sum = maxSubArraySum(arr, 0, n-1); // in our prog n is the index 
+   int max_sum = maxSubArraySum(arr, 0, n-1); // in our prog n is the count_input 
    cout << "Maximum contiguous sum is " << max_sum << endl;
  //  getchar();
    return 0;
