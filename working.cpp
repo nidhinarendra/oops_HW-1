@@ -1,11 +1,13 @@
 #include <fstream>
 #include <iostream>
-#include <string>
+#include <cstring>
 #include <sstream>
 #include <cstring>
 #include <climits>
 #include <ctime>
 #include <cctype>
+#include <cstdio>
+
 
 using namespace std;
 
@@ -35,7 +37,7 @@ int nested_loop(double input_data[], int count_input)
 	    }
 	}
     }
-  int stop_time = clock();
+  int stop_time = clock(); //Computation time ends for Brute force algorithm
   cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
   return 0;
 }
@@ -119,7 +121,7 @@ int main(int argc, char *argv[])
       
       if(!file.is_open())
 	{
-	  cerr << "File not found" <<endl;
+	  cerr << "FILE NOT FOUND" <<endl;
 	  return -1;
 	}
       
@@ -127,64 +129,71 @@ int main(int argc, char *argv[])
 	{
 	  file >> stream1;
 	  stringstream ss(stream1);
-	  while ( getline (ss, stream1, ','))
+	  std::locale loc;
+	  for (std::string::iterator it=stream1.begin(); it!=stream1.end(); ++it)
 	    {
-	      stringstream ss(stream1);
-	      ss >> finalfloat;
-	      
-	      if ( !ss ) 
-		{ 
-		  cerr << "INVALID INPUT" <<endl;
+	      if (std::isalpha(*it,loc)) //To check if any alphabet is present in the input file
+		{
+		  cerr << "INVALID INPUT DATA\n";
 		  return -2;
 		}
-	      else
+	    }
+	  
+	      while ( getline (ss, stream1, ','))
 		{
-		  if (file.eof()) 
-		    break;	
+		  stringstream ss(stream1);
+		  ss >> finalfloat;
+	      
+		  if ( !ss ) 
+		    { 
+		      cerr << "INVALID INPUT DATA" <<endl;
+		      return -3;
+		    }
 		  else
-		    {						
-		      if (index == length)
-			{
-			  length = length * 2;
-			  input_data_old = input_data;
-			  input_data = new double [length];
-			  memcpy((char*)input_data, (const char*)input_data_old,
-				 (sizeof(double) * length));
-			}
-		      input_data[index ++] = finalfloat;
-			if (isalpha (input_data[index]))
-			{
-			  cerr << "INVALID INPUT DATA\n";
-			  return -4;
+		    {
+		      if (file.eof()) 
+			break;	
+		      else
+			{						
+			  if (index == length)  //Dynamically growing the array
+			    {
+			      length = length * 2;
+			      input_data_old = input_data;
+			      input_data = new double [length];
+			      memcpy((char*)input_data, (const char*)input_data_old,
+				     (sizeof(double) * length));
+			    }
+			  input_data[index ++] = finalfloat;
+			
 			}
 		    }
 		}
+	    } 
+
+
+	  file.close();
+	  if (index == 0)
+	    {
+	      cerr << "NO DATA PROVIDED IN THE FILE\n";
+	      return -4;
 	    }
-	} 
-      file.close();
-      if (index == 0)
-	{
-	  cerr << "INVALID INPUT DATA\n";
-	  return 0;
+	  else
+	    {
+
+	      double max_sum_nested = nested_loop(input_data, index);
+	      int start_time = clock(); //Computation time starts for Divide and conquer algorithm
+	      double max_sum_dnc = dnc(input_data, 0 ,index-1);
+	      int end_time = clock(); //Computation time ends for Divide and Conquer algorithm
+	      cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+	      return 0;
+	    }
 	}
       else
 	{
-
-	  double max_sum_nested = nested_loop(input_data, index);
-	  int start_time = clock();
-	  double max_sum_dnc = dnc(input_data, 0 ,index-1);
-	  int end_time = clock();
-	  cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
-	  return 0;
+	  cerr << "WRONG NUMBER OF ARGUMENTS PROVIDED \n";  
+	  return -5;
 	}
     }
-  else
-    {
-      cerr << "Wrong number of arguments provided \n";  
-      return -3;
-    }
-  //should never come here
-}
 
 
 
