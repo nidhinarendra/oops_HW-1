@@ -147,8 +147,8 @@ int main(int argc, char *argv[])
 			  length = length * 2;
 			  input_data_old = input_data;
 			  input_data = new double [length];
-			  strncpy((char*)input_data, (const char*)input_data_old,
-				  sizeof(input_data_old));
+			  memcpy((char*)input_data, (const char*)input_data_old,
+				 (sizeof(double) * length));
 			}
 		      input_data[index ++] = finalfloat;
 		    }
