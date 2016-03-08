@@ -13,9 +13,8 @@ using namespace std;
 
 
 //Brute force algorithm
-int nested_loop(double input_data[], int count_input)
+double nested_loop(double input_data[], int count_input)
 {
-  int start_time = clock(); //Computation time starts for Brute force algorithm
   double sum = 0;
   double max_sum = INT_MIN;
   int index_point;
@@ -37,9 +36,7 @@ int nested_loop(double input_data[], int count_input)
 	    }
 	}
     }
-  int stop_time = clock(); //Computation time ends for Brute force algorithm
-  cout << max_sum << "\t" << (stop_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
-  return 0;
+  return max_sum;
 }
 
 //Divide and conqure
@@ -143,7 +140,7 @@ int main(int argc, char *argv[])
 			continue;
 		      else
 			cerr << "INVALID INPUT DATA\n";
-			return -3;
+			return -2;
 		    }
 		  
 		  stringstream ss(stream1);
@@ -184,12 +181,18 @@ int main(int argc, char *argv[])
 	    }
 	  else
 	    {
-
 	      double max_sum_nested = nested_loop(input_data, index);
-	      int start_time = clock(); //Computation time starts for Divide and conquer algorithm
+	      int start_time_nested = clock(); //Computation time starts for Brute force algorithm
+	      max_sum_nested = nested_loop(input_data, index);
+	      int stop_time_nested = clock();//Computation time ends for Brute force algorithm
+	      cout << max_sum_nested << "\t" << (stop_time_nested-start_time_nested)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+
+
 	      double max_sum_dnc = dnc(input_data, 0 ,index-1);
-	      int end_time = clock(); //Computation time ends for Divide and Conquer algorithm
-	      cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+	      int start_time_dnc = clock(); //Computation time starts for Divide and conquer algorithm
+	      max_sum_dnc = dnc(input_data, 0 ,index-1);
+	      int end_time_dnc = clock(); //Computation time ends for Divide and Conquer algorithm
+	      cout << max_sum_dnc << "\t" << (end_time_dnc-start_time_dnc)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
 	      return 0;
 	    }
 	}
