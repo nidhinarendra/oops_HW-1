@@ -145,11 +145,11 @@ int main(int argc, char *argv[])
 		    {
 		      char c = stream1[i];
 		      if ( c >= '0' && c <= '9')
-			cout << stream1[i] << "true!! \n";
+			cout << stream1[i] << " \t true!! \n";
 		      else if(c == '.')
-			cout << stream1[i] << "true!! \n";
+			cout << stream1[i] << "\t true!! \n";
 		      else
-			cout << stream1[i] << "false!! \n";
+			cout << stream1[i] << "\t false!! \n";
 		    }
 		  
 		  stringstream ss(stream1);
