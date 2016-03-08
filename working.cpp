@@ -149,11 +149,7 @@ int main(int argc, char *argv[])
 			  input_data_old = input_data;
 			  input_data = new double [length];
 			  memcpy((char*)input_data, (const char*)input_data_old,
-<<<<<<< Updated upstream
 				 (sizeof(double) * length));
-=======
-				  (sizeof(double) * length));
->>>>>>> Stashed changes
 			}
 		      input_data[index ++] = finalfloat;
 			if (isalpha (input_data[index]))
@@ -166,27 +162,20 @@ int main(int argc, char *argv[])
 	    }
 	} 
       file.close();
-<<<<<<< Updated upstream
       if (index == 0)
-      { 
-      	cerr << "INVALID INPUT DATA\n";
-      }
-      else
-=======
-	if (index == 0)
 	{
 	  cerr << "INVALID INPUT DATA\n";
 	  return 0;
 	}
       else
 	{
->>>>>>> Stashed changes
-      double max_sum_nested = nested_loop(input_data, index);
-      int start_time = clock();
-      double max_sum_dnc = dnc(input_data, 0 ,index-1);
-      int end_time = clock();
-      cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
-      return 0;
+
+	  double max_sum_nested = nested_loop(input_data, index);
+	  int start_time = clock();
+	  double max_sum_dnc = dnc(input_data, 0 ,index-1);
+	  int end_time = clock();
+	  cout << max_sum_dnc << "\t" << (end_time-start_time)/double (CLOCKS_PER_SEC) << "[sec]" << endl;
+	  return 0;
 	}
     }
   else
